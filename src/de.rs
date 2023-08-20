@@ -63,7 +63,6 @@ impl<'de, 'b> de::Deserializer<'de> for &'b mut Deserializer {
         deserialize_u16,
         deserialize_u64,
         deserialize_char,
-        deserialize_str,
         deserialize_bytes,
         deserialize_unit,
         deserialize_identifier,
@@ -108,6 +107,10 @@ impl<'de, 'b> de::Deserializer<'de> for &'b mut Deserializer {
 
     fn deserialize_string<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value> {
         get_value!(self, visitor, visit_string, String)
+    }
+
+    fn deserialize_str<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value> {
+        get_value!(self, visitor, visit_str, &str)
     }
 
     fn deserialize_byte_buf<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value> {
