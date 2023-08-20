@@ -132,31 +132,45 @@ impl<'de, 'b> de::Deserializer<'de> for &'b mut Deserializer {
         Err(Error::UnsupportedType)
     }
 
-    fn deserialize_unit_struct<V: Visitor<'de>>(self, _: &str, _: V)
-        -> Result<V::Value>
+    fn deserialize_unit_struct<V>(
+        self,
+        _name: &'static str,
+        visitor: V,
+    ) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
     {
-        Err(Error::UnsupportedType)
+        self.deserialize_unit(visitor)
     }
 
-    fn deserialize_newtype_struct<V: Visitor<'de>>(self, _: &str, _: V)
-        -> Result<V::Value>
+    fn deserialize_newtype_struct<V>(
+        self,
+        _name: &'static str,
+        visitor: V,
+    ) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
     {
-        Err(Error::UnsupportedType)
+        visitor.visit_newtype_struct(self)
     }
 
-    fn deserialize_tuple<V: Visitor<'de>>(self, _: usize, _: V)
-        -> Result<V::Value>
+    fn deserialize_tuple<V>(self, _len: usize, visitor: V) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
     {
-        Err(Error::UnsupportedType)
+        self.deserialize_seq(visitor)
     }
 
-    fn deserialize_tuple_struct<V: Visitor<'de>>(self,
-                                                 _: &str,
-                                                 _: usize,
-                                                 _: V)
-        -> Result<V::Value>
+    fn deserialize_tuple_struct<V>(
+        self,
+        _name: &'static str,
+        _len: usize,
+        visitor: V,
+    ) -> Result<V::Value>
+    where
+        V: Visitor<'de>,
     {
-        Err(Error::UnsupportedType)
+        self.deserialize_seq(visitor)
     }
 
     fn deserialize_map<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value> {
